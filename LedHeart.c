@@ -4,13 +4,13 @@
 #include <avr/pgmspace.h>
 
 
-//время задержки старта
+//Delay at start
 #define START_DELAY 500
 
-//время задержки иницилизации
+//Delay at initial switching leds on 
 #define INIT_DELAY 10
 
-//время задержки между эффектами
+//Delay between effects
 #define EFFECT_DELAY 30
 
   void main(void)
@@ -41,6 +41,17 @@
 			ledAllOn();
 			_delay_ms(EFFECT_DELAY);
 		}
+		
+		for(int i=0;i<10;i++)
+		{
+			oddAllOn();
+			_delay_ms(EFFECT_DELAY);
+			oddAllOff();
+			evenAllOn();
+			_delay_ms(EFFECT_DELAY);
+			evenAllOff();			
+		}
+		_delay_ms(EFFECT_DELAY);
 	}
 	
   }
@@ -317,4 +328,41 @@
 			ledOff(i);
 		}
 	}
+	
+	//Switch on all odd leds
+	void oddAllOn()
+	{
+		for(int i = 1; i < 22; i = i + 2)
+		{
+			ledOn(i);
+		}
+	}
+	
+	//Switch off all odd leds
+	void oddAllOff()
+	{
+		for(int i = 1; i < 22; i = i + 2)
+		{
+			ledOff(i);
+		}
+	}
+	
+	//Switch on all even leds
+	void evenAllOn()
+	{
+		for(int i = 0; i < 21; i = i + 2)
+		{
+			ledOn(i);
+		}
+	}
+	
+	//Switch off all even leds
+	void evenAllOff()
+	{
+		for(int i = 0; i < 21; i = i + 2)
+		{
+			ledOff(i);
+		}
+	}
+	
 	
