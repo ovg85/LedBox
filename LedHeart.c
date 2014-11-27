@@ -25,6 +25,7 @@
 //Count of diodes pair
 #define DIODES_PAIR_COUNT 12
 
+#define SNAKE_DELAY 30
 
   void main(void)
   {
@@ -78,6 +79,11 @@
 		}
 		_delay_ms(EFFECT_DELAY);
 		
+		
+		snakeLedClockWise(SNAKE_DELAY, 3, 3);
+		_delay_ms(EFFECT_DELAY);
+		snakeLedAnticlockWise(SNAKE_DELAY, 3, 3);
+		_delay_ms(EFFECT_DELAY);
 	}
 	
   }
@@ -389,4 +395,61 @@
 		}
 	}
 	
+	//ClockWise snake
+	//delay: delay between leg switching. 
+	//length: snake length
+	//rotationCount: Count of snake rotation 
+	void snakeLedClockWise(int delay, int length, int rotationCount)
+	{
+		for(int i=0;i<rotationCount;i++)
+		{
+			for(int j=0;j<DIODES_COUNT;j++)
+			{
+				ledOn(j);
+				if(j >= length)
+				{
+					ledOff(j - length);
+				}
+				else
+				{
+					ledOff(DIODES_COUNT - length + j);
+				}	
+			_delay_ms(delay);			
+			}
+		}
+		for(int i=DIODES_COUNT - length - 1;i<DIODES_COUNT;i++)
+		{
+			ledOff(i);
+			_delay_ms(delay);	
+		}
+	}
+	
+	//AnticlockWise snake
+	//delay: delay between leg switching. 
+	//length: snake length
+	//rotationCount: Count of snake rotation 
+	void snakeLedAnticlockWise(int delay, int length, int rotationCount)
+	{
+		for(int i=0;i<rotationCount;i++)
+		{
+			for(int j=0;j<DIODES_COUNT;j++)
+			{
+				ledOn(DIODES_COUNT - 1 - j);
+				if(j > length - 1)
+				{
+					ledOff(DIODES_COUNT + length - j - 1);
+				}
+				else
+				{
+					ledOff(length - j - 1);
+				}
+			_delay_ms(delay);
+			}
+		}
+		for(int i=length - 1;i>=0;i--)
+		{
+			ledOff(i);
+			_delay_ms(delay);	
+		}
+	}
 	
