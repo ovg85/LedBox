@@ -13,6 +13,9 @@
 //Delay between effects
 #define EFFECT_DELAY 30
 
+//Delay for falling leds
+#define FALL_DALAY 15
+
   void main(void)
   {
     DDRB = 0xFF;
@@ -28,12 +31,15 @@
 	 
 	_delay_ms(EFFECT_DELAY);
 	 
+	ledAllOff();
+	 
 	while (1) {
 		
 		SequencePairOff(INIT_DELAY);
 		_delay_ms(EFFECT_DELAY);
 		SequencePairOn(INIT_DELAY);
 		_delay_ms(EFFECT_DELAY);
+		
 		for(int i=0; i<5; i++)
 		{
 			ledAllOff();
@@ -50,6 +56,14 @@
 			evenAllOn();
 			_delay_ms(EFFECT_DELAY);
 			evenAllOff();			
+		}
+		_delay_ms(EFFECT_DELAY);
+		
+		for(int i=0;i<5;i++)
+		{
+			fallLedsByPair(FALL_DALAY);
+			_delay_ms(FALL_DALAY);
+			ledAllOff();
 		}
 		_delay_ms(EFFECT_DELAY);
 	}
@@ -365,4 +379,22 @@
 		}
 	}
 	
-	
+	//Falling leds from top to bottom, like stack.
+	void fallLedsByPair(int delay)
+	{
+		int counter = 0;
+		for(int i = 1; i < 12; i++)
+		{
+			for(int j=12; j >= i; j--)
+			{
+				counter++;
+				if(j < 12)
+				{
+					ledPairOff(j);
+				}
+				ledPairOn(j - 1);
+				_delay_ms(delay);
+			}
+		}
+		
+	}
