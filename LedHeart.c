@@ -25,7 +25,7 @@
 //Count of diodes pair
 #define DIODES_PAIR_COUNT 12
 
-#define SNAKE_DELAY 30
+#define SNAKE_DELAY 10
 
   void main(void)
   {
@@ -41,8 +41,6 @@
 	SequencePairOn(INIT_DELAY);
 	
 	_delay_ms(EFFECT_DELAY);
-	 
-	ledAllOff();
 	 
 	while (1) {
 		
@@ -83,6 +81,13 @@
 		snakeLedClockWise(SNAKE_DELAY, 3, 3);
 		_delay_ms(EFFECT_DELAY);
 		snakeLedAnticlockWise(SNAKE_DELAY, 3, 3);
+		_delay_ms(EFFECT_DELAY);
+		
+		for(int i=0;i<5;i++)
+		{
+			snakeTwoUp(SNAKE_DELAY, 3, 1);
+			snakeTwoDown(SNAKE_DELAY, 3, 1);
+		}
 		_delay_ms(EFFECT_DELAY);
 	}
 	
@@ -308,19 +313,17 @@
 	//Switch on all leds
 	void ledAllOn()
 	{
-		for(int i=0;i<DIODES_COUNT;i++)
-		{
-			ledOn(i);
-		}
+		PORTB = 0xFF;
+		PORTC = 0xFF;
+		PORTD = 0xFF;
 	}
 	
 	//Switch off all leds
 	void ledAllOff()
 	{
-		for(int i=0;i<22;i++)
-		{
-			ledOff(i);
-		}
+		PORTB = 0x00;
+		PORTC = 0x00;
+		PORTD = 0x00;
 	}
 	
 	//Switch on all odd leds
@@ -453,3 +456,48 @@
 		}
 	}
 	
+	//2 snakes moving up
+	//delay: delay between leg switching. 
+	//length: snake length
+	//rotationCount: Count of snake rotation 
+	void snakeTwoUp(int delay, int length, int rotationCount)
+	{
+		for(int i=0;i<rotationCount;i++)
+		{
+			for(int j=0;j<DIODES_PAIR_COUNT+length;j++)
+			{
+				if(j < DIODES_PAIR_COUNT)
+				{
+					ledPairOn(j);
+				}
+				if(j >= length)
+				{
+					ledPairOff(j - length);
+				}
+				_delay_ms(delay);
+			}
+		}
+	}
+	
+	//2 snakes moving down
+	//delay: delay between leg switching. 
+	//length: snake length
+	//rotationCount: Count of snake rotation 
+	void snakeTwoDown(int delay, int length, int rotationCount)
+	{
+		for(int i=0;i<rotationCount;i++)
+		{
+			for(int j=DIODES_PAIR_COUNT-1;j>=-length;j--)
+			{
+				if(j>=0)
+				{
+					ledPairOn(j);
+				}
+				if(j+length<DIODES_PAIR_COUNT)
+				{
+					ledPairOff(j+length);
+				}
+				_delay_ms(delay);
+			}
+		}
+	}
