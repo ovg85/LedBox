@@ -16,6 +16,8 @@
 //Delay for falling leds
 #define FALL_DELAY 15
 
+#define EVEN_ODD_DELAY 30
+
 //Total diodes count
 #define DIODES_COUNT 22
 
@@ -43,30 +45,10 @@
 	_delay_ms(EFFECT_DELAY);
 	 
 	while (1) {
-		
-		SequencePairOff(INIT_DELAY);
-		_delay_ms(EFFECT_DELAY);
-		SequencePairOn(INIT_DELAY);
+		ledBlinking(EFFECT_DELAY, 5);
 		_delay_ms(EFFECT_DELAY);
 		
-		for(int i=0; i<5; i++)
-		{
-			ledAllOff();
-			_delay_ms(EFFECT_DELAY);
-			ledAllOn();
-			_delay_ms(EFFECT_DELAY);
-		}
-		
-		for(int i=0;i<10;i++)
-		{
-			oddAllOn();
-			_delay_ms(EFFECT_DELAY);
-			oddAllOff();
-			evenAllOn();
-			_delay_ms(EFFECT_DELAY);
-			evenAllOff();			
-		}
-		
+		evenOddOnOff(EVEN_ODD_DELAY, 10);
 		_delay_ms(EFFECT_DELAY);
 		
 		for(int i=0;i<3;i++)
@@ -77,6 +59,11 @@
 		}
 		_delay_ms(EFFECT_DELAY);
 		
+		SequencePairOn(INIT_DELAY);
+		_delay_ms(EFFECT_DELAY);
+		
+		SequencePairOff(INIT_DELAY);
+		_delay_ms(EFFECT_DELAY);
 		
 		for(int i=0;i<3;i++)
 		{
@@ -360,8 +347,41 @@
 		PORTD &= 0b01010101;
 	}
 	
+	//leds Blinking 
+	//delay: delay between led switching.
+	//rotationCount: Count of switching 
+	void ledBlinking(int delay, int rotationCount)
+	{
+		ledAllOn();
+		_delay_ms(delay);
+		for(int i=0;i<rotationCount - 1;i++)
+		{
+			ledAllOff();
+			_delay_ms(delay);
+			ledAllOn();
+			_delay_ms(delay);
+		}
+		ledAllOff();
+	}
+	
+	//sequential switching odd and even leds
+	//delay: delay between led switching.
+	//rotationCount: Count of switching 
+	void evenOddOnOff(int delay, int rotationCount)
+	{
+		for(int i=0;i<rotationCount;i++)
+		{	
+			oddAllOn();
+			_delay_ms(delay);
+			oddAllOff();
+			evenAllOn();
+			_delay_ms(delay);
+			evenAllOff();
+		}
+	}
+	
 	//Creating heart by falling leds from top to bottom, like stack.
-	//delay: delay between leg switching.
+	//delay: delay between led switching.
 	void makeHeartByPairFall(int delay)
 	{
 		for(int i = 1; i <= DIODES_PAIR_COUNT; i++)
@@ -379,7 +399,7 @@
 	}
 	
 	//Breaking heart by falling leds from top to bottom.
-	//delay: delay between leg switching.
+	//delay: delay between led switching.
 	void breakHeartByPairFall(int delay)
 	{
 		for(int i = 0; i < DIODES_PAIR_COUNT; i++)
@@ -397,7 +417,7 @@
 	}
 	
 	//ClockWise snake
-	//delay: delay between leg switching. 
+	//delay: delay between led switching. 
 	//length: snake length
 	//rotationCount: Count of snake rotation 
 	void snakeLedClockWise(int delay, int length, int rotationCount)
@@ -426,7 +446,7 @@
 	}
 	
 	//AnticlockWise snake
-	//delay: delay between leg switching. 
+	//delay: delay between led switching. 
 	//length: snake length
 	//rotationCount: Count of snake rotation 
 	void snakeLedAnticlockWise(int delay, int length, int rotationCount)
@@ -455,7 +475,7 @@
 	}
 	
 	//2 snakes moving up
-	//delay: delay between leg switching. 
+	//delay: delay between led switching. 
 	//length: snake length
 	//rotationCount: Count of snake rotation 
 	void snakeTwoUp(int delay, int length, int rotationCount)
@@ -478,7 +498,7 @@
 	}
 	
 	//2 snakes moving down
-	//delay: delay between leg switching. 
+	//delay: delay between led switching. 
 	//length: snake length
 	//rotationCount: Count of snake rotation 
 	void snakeTwoDown(int delay, int length, int rotationCount)
