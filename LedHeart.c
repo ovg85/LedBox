@@ -14,7 +14,7 @@
 #define EFFECT_DELAY 30
 
 //Delay for falling leds
-#define FALL_DALAY 5
+#define FALL_DELAY 15
 
 //Total diodes count
 #define DIODES_COUNT 22
@@ -69,21 +69,23 @@
 		
 		_delay_ms(EFFECT_DELAY);
 		
-		for(int i=0;i<5;i++)
+		for(int i=0;i<3;i++)
 		{
-			makeHeartByPairFall(FALL_DALAY);
-			_delay_ms(FALL_DALAY);
-			breakHeartByPairFall(FALL_DALAY);
+			makeHeartByPairFall(FALL_DELAY);
+			_delay_ms(FALL_DELAY);
+			breakHeartByPairFall(FALL_DELAY);
 		}
 		_delay_ms(EFFECT_DELAY);
 		
 		
-		snakeLedClockWise(SNAKE_DELAY, 3, 3);
-		_delay_ms(EFFECT_DELAY);
-		snakeLedAnticlockWise(SNAKE_DELAY, 3, 3);
+		for(int i=0;i<3;i++)
+		{
+			snakeLedClockWise(SNAKE_DELAY, 3, 1);
+			snakeLedAnticlockWise(SNAKE_DELAY, 3, 1);
+		}
 		_delay_ms(EFFECT_DELAY);
 		
-		for(int i=0;i<5;i++)
+		for(int i=0;i<3;i++)
 		{
 			snakeTwoUp(SNAKE_DELAY, 3, 1);
 			snakeTwoDown(SNAKE_DELAY, 3, 1);
@@ -329,37 +331,33 @@
 	//Switch on all odd leds
 	void oddAllOn()
 	{
-		for(int i = 1; i < DIODES_COUNT; i = i + 2)
-		{
-			ledOn(i);
-		}
+		PORTB |= 0b10010101;
+		PORTC |= 0b00010101;
+		PORTD |= 0b01010101;
 	}
 	
 	//Switch off all odd leds
 	void oddAllOff()
 	{
-		for(int i = 1; i < DIODES_COUNT; i = i + 2)
-		{
-			ledOff(i);
-		}
+		PORTB &= 0b01101010;
+		PORTC &= 0b00101010;
+		PORTD &= 0b10101010;
 	}
 	
 	//Switch on all even leds
 	void evenAllOn()
 	{
-		for(int i = 0; i < DIODES_COUNT; i = i + 2)
-		{
-			ledOn(i);
-		}
+		PORTB |= 0b01101010;
+		PORTC |= 0b00101010;
+		PORTD |= 0b10101010;
 	}
 	
 	//Switch off all even leds
 	void evenAllOff()
 	{
-		for(int i = 0; i < DIODES_COUNT; i = i + 2)
-		{
-			ledOff(i);
-		}
+		PORTB &= 0b10010101;
+		PORTC &= 0b00010101;
+		PORTD &= 0b01010101;
 	}
 	
 	//Creating heart by falling leds from top to bottom, like stack.
