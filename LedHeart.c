@@ -3,7 +3,6 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
-
 //Delay at start
 #define START_DELAY 250
 
@@ -29,7 +28,7 @@
 
 #define SNAKE_DELAY 10
 
-  void main(void)
+  int main(void)
   {
     DDRB = 0xFF;
 	DDRC = 0xFF;
@@ -38,6 +37,12 @@
 	PORTC = 0x00;
 	PORTD = 0x00;
  
+	int ledRandNum[DIODES_COUNT]=
+	{16,1,13,8,4,5,18,7,3,14,10,17,
+	21,2,9,15,0,19,6,11,20,12};
+	
+	
+ 
 	_delay_ms(START_DELAY);
 	 
 	SequencePairOn(INIT_DELAY);
@@ -45,6 +50,14 @@
 	_delay_ms(EFFECT_DELAY);
 	 
 	while (1) {
+	
+		ledAllOff();
+		for(int i=0;i<DIODES_COUNT;i++)
+		{
+			ledOn(ledRandNum[i]);
+			_delay_ms(EFFECT_DELAY);
+		}
+	
 		ledBlinking(EFFECT_DELAY, 5);
 		_delay_ms(EFFECT_DELAY);
 		
@@ -79,7 +92,7 @@
 		}
 		_delay_ms(EFFECT_DELAY);
 	}
-	
+	return 0;
   }
   
   //Switch on led
@@ -346,6 +359,8 @@
 		PORTC &= 0b00010101;
 		PORTD &= 0b01010101;
 	}
+	
+	
 	
 	//leds Blinking 
 	//delay: delay between led switching.
