@@ -3,6 +3,11 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
+#define SetPortBit(port, bit) port |= (1<<bit)
+//PORTB |= _BV(5);
+#define ClearPortBit(port, bit) port &= ~(1<<bit)
+//PORTB &= ~(_BV(5));
+
 //Delay at start
 #define START_DELAY 250
 
@@ -40,7 +45,6 @@
 	int ledRandNum[DIODES_COUNT]=
 	{16,1,13,8,4,5,18,7,3,14,10,17,
 	21,2,9,15,0,19,6,11,20,12};
-	
 	
  
 	_delay_ms(START_DELAY);
@@ -102,72 +106,73 @@
 	{
 		//left side
 		case 0:
-			PORTB |= _BV(5);
+			SetPortBit(PORTB, 5);
+			//PORTB |= _BV(5);
 		break;
 		case 1:
-			PORTB |= _BV(4);
+			SetPortBit(PORTB, 4);
 		break;
 		case 2:
-			PORTB |= _BV(3);
+			SetPortBit(PORTB, 3);
 		break;
 		case 3:
-			PORTB |= _BV(2);
+			SetPortBit(PORTB, 2);
 		break;
 		case 4:
-			PORTB |= _BV(1);
+			SetPortBit(PORTB, 1);
 		break;
 		case 5:
-			PORTB |= _BV(0);
+			SetPortBit(PORTB, 0);
 		break;
 		case 6:
-			PORTD |= _BV(7);
+			SetPortBit(PORTD, 7);
 		break;
 		case 7:
-			PORTD |= _BV(6);
+			SetPortBit(PORTD, 6);
 		break;
 		case 8:
-			PORTD |= _BV(5);
+			SetPortBit(PORTD, 5);
 		break;
 		case 9:
-			PORTB |= _BV(7);
+			SetPortBit(PORTB, 7);
 		break;
 		case 10:
-			PORTB |= _BV(6);
+			SetPortBit(PORTB, 6);
 		break;
 		
 		//Right side
 		case 11:
-			PORTD |= _BV(4);
+			SetPortBit(PORTD, 4);
 		break;
 		case 12:
-			PORTD |= _BV(3);
+			SetPortBit(PORTD, 3);
 		break;
 		case 13:
-			PORTD |= _BV(2);
+			SetPortBit(PORTD, 2);
 		break;
 		case 14:
-			PORTD |= _BV(1);
+			SetPortBit(PORTD, 1);
 		break;
 		case 15:
-			PORTD |= _BV(0);
+			SetPortBit(PORTD, 0);
 		break;
 		case 16:
-			PORTC |= _BV(5);
+			SetPortBit(PORTC, 5);
 		break;
 		case 17:
-			PORTC |= _BV(4);
+			SetPortBit(PORTC, 4);
 		break;
 		case 18:
-			PORTC |= _BV(3);
+			SetPortBit(PORTC, 3);
 		break;
 		case 19:
-			PORTC |= _BV(2);
+			SetPortBit(PORTC, 2);
 		break;
 		case 20:
-			PORTC |= _BV(1);
+			SetPortBit(PORTC, 1);
 		break;
 		case 21:
-			PORTC |= _BV(0);
+			SetPortBit(PORTC, 0);
 		break;
 	}
   }
@@ -179,73 +184,74 @@
 	{
 		//left side
 		case 0:
-			PORTB &= ~(_BV(5));
+			ClearPortBit(PORTB, 5);
+			//PORTB &= ~(_BV(5));
 		break;
 		case 1:
-			PORTB &= ~(_BV(4));
+			ClearPortBit(PORTB, 4);
 		break;
 		case 2:
-			PORTB &= ~(_BV(3));
+			ClearPortBit(PORTB, 3);
 		break;
 		case 3:
-			PORTB &= ~(_BV(2));
+			ClearPortBit(PORTB, 2);
 		break;
 		case 4:
-			PORTB &= ~(_BV(1));
+			ClearPortBit(PORTB, 1);
 		break;
 		case 5:
-			PORTB &= ~(_BV(0));
+			ClearPortBit(PORTB, 0);
 		break;
 		case 6:
-			PORTD &= ~(_BV(7));
+			ClearPortBit(PORTD, 7);
 		break;
 		case 7:
-			PORTD &= ~(_BV(6));
+			ClearPortBit(PORTD, 6);
 		break;
 		case 8:
-			PORTD &= ~(_BV(5));
+			ClearPortBit(PORTD, 5);
 		break;
 		case 9:
-			PORTB &= ~(_BV(7));
+			ClearPortBit(PORTB, 7);
 		break;
 		case 10:
-			PORTB &= ~(_BV(6));
+			ClearPortBit(PORTB, 6);
 		break;
 		
 		
 		//Right side
 		case 11:
-			PORTD &= ~(_BV(4));
+			ClearPortBit(PORTD, 4);
 		break;
 		case 12:
-			PORTD &= ~(_BV(3));
+			ClearPortBit(PORTD, 3);
 		break;
 		case 13:
-			PORTD &= ~(_BV(2));
+			ClearPortBit(PORTD, 2);
 		break;
 		case 14:
-			PORTD &= ~(_BV(1));
+			ClearPortBit(PORTD, 1);
 		break;
 		case 15:
-			PORTD &= ~(_BV(0));
+			ClearPortBit(PORTD, 0);
 		break;
 		case 16:
-			PORTC &= ~(_BV(5));
+			ClearPortBit(PORTC, 5);
 		break;
 		case 17:
-			PORTC &= ~(_BV(4));
+			ClearPortBit(PORTC, 4);
 		break;
 		case 18:
-			PORTC &= ~(_BV(3));
+			ClearPortBit(PORTC, 3);
 		break;
 		case 19:
-			PORTC &= ~(_BV(2));
+			ClearPortBit(PORTC, 2);
 		break;
 		case 20:
-			PORTC &= ~(_BV(1));
+			ClearPortBit(PORTC, 1);
 		break;
 		case 21:
-			PORTC &= ~(_BV(0));
+			ClearPortBit(PORTC, 0);
 		break;
 		
 	}
@@ -384,14 +390,15 @@
 	//rotationCount: Count of switching 
 	void evenOddOnOff(int delay, int rotationCount)
 	{
+		ledAllOff();
 		for(int i=0;i<rotationCount;i++)
 		{	
 			oddAllOn();
 			_delay_ms(delay);
-			oddAllOff();
+			ledAllOff();
 			evenAllOn();
 			_delay_ms(delay);
-			evenAllOff();
+			ledAllOff();
 		}
 	}
 	
