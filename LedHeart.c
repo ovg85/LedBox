@@ -3,6 +3,10 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
+#define SetPortBit(port, bit) port |= (1<<bit)
+//PORTB |= _BV(5);
+#define ClearPortBit(port, bit) port &= ~(1<<bit)
+//PORTB &= ~(_BV(5));
 
 //Delay at start
 #define START_DELAY 250
@@ -14,7 +18,9 @@
 #define EFFECT_DELAY 30
 
 //Delay for falling leds
-#define FALL_DALAY 5
+#define FALL_DELAY 15
+
+#define EVEN_ODD_DELAY 30
 
 //Total diodes count
 #define DIODES_COUNT 22
@@ -27,7 +33,7 @@
 
 #define SNAKE_DELAY 10
 
-  void main(void)
+  int main(void)
   {
     DDRB = 0xFF;
 	DDRC = 0xFF;
@@ -36,6 +42,11 @@
 	PORTC = 0x00;
 	PORTD = 0x00;
  
+	int ledRandNum[DIODES_COUNT]=
+	{16,1,13,8,4,5,18,7,3,14,10,17,
+	21,2,9,15,0,19,6,11,20,12};
+	
+ 
 	_delay_ms(START_DELAY);
 	 
 	SequencePairOn(INIT_DELAY);
@@ -43,54 +54,49 @@
 	_delay_ms(EFFECT_DELAY);
 	 
 	while (1) {
-		
-		SequencePairOff(INIT_DELAY);
+	
+		ledAllOff();
+		for(int i=0;i<DIODES_COUNT;i++)
+		{
+			ledOn(ledRandNum[i]);
+			_delay_ms(EFFECT_DELAY);
+		}
+	
+		ledBlinking(EFFECT_DELAY, 5);
 		_delay_ms(EFFECT_DELAY);
+		
+		evenOddOnOff(EVEN_ODD_DELAY, 10);
+		_delay_ms(EFFECT_DELAY);
+		
+		for(int i=0;i<3;i++)
+		{
+			makeHeartByPairFall(FALL_DELAY);
+			_delay_ms(FALL_DELAY);
+			breakHeartByPairFall(FALL_DELAY);
+		}
+		_delay_ms(EFFECT_DELAY);
+		
 		SequencePairOn(INIT_DELAY);
 		_delay_ms(EFFECT_DELAY);
 		
-		for(int i=0; i<5; i++)
-		{
-			ledAllOff();
-			_delay_ms(EFFECT_DELAY);
-			ledAllOn();
-			_delay_ms(EFFECT_DELAY);
-		}
-		
-		for(int i=0;i<10;i++)
-		{
-			oddAllOn();
-			_delay_ms(EFFECT_DELAY);
-			oddAllOff();
-			evenAllOn();
-			_delay_ms(EFFECT_DELAY);
-			evenAllOff();			
-		}
-		
+		SequencePairOff(INIT_DELAY);
 		_delay_ms(EFFECT_DELAY);
 		
-		for(int i=0;i<5;i++)
+		for(int i=0;i<3;i++)
 		{
-			makeHeartByPairFall(FALL_DALAY);
-			_delay_ms(FALL_DALAY);
-			breakHeartByPairFall(FALL_DALAY);
+			snakeLedClockWise(SNAKE_DELAY, 3, 1);
+			snakeLedAnticlockWise(SNAKE_DELAY, 3, 1);
 		}
 		_delay_ms(EFFECT_DELAY);
 		
-		
-		snakeLedClockWise(SNAKE_DELAY, 3, 3);
-		_delay_ms(EFFECT_DELAY);
-		snakeLedAnticlockWise(SNAKE_DELAY, 3, 3);
-		_delay_ms(EFFECT_DELAY);
-		
-		for(int i=0;i<5;i++)
+		for(int i=0;i<3;i++)
 		{
 			snakeTwoUp(SNAKE_DELAY, 3, 1);
 			snakeTwoDown(SNAKE_DELAY, 3, 1);
 		}
 		_delay_ms(EFFECT_DELAY);
 	}
-	
+	return 0;
   }
   
   //Switch on led
@@ -100,72 +106,73 @@
 	{
 		//left side
 		case 0:
-			PORTB |= _BV(5);
+			SetPortBit(PORTB, 5);
+			//PORTB |= _BV(5);
 		break;
 		case 1:
-			PORTB |= _BV(4);
+			SetPortBit(PORTB, 4);
 		break;
 		case 2:
-			PORTB |= _BV(3);
+			SetPortBit(PORTB, 3);
 		break;
 		case 3:
-			PORTB |= _BV(2);
+			SetPortBit(PORTB, 2);
 		break;
 		case 4:
-			PORTB |= _BV(1);
+			SetPortBit(PORTB, 1);
 		break;
 		case 5:
-			PORTB |= _BV(0);
+			SetPortBit(PORTB, 0);
 		break;
 		case 6:
-			PORTD |= _BV(7);
+			SetPortBit(PORTD, 7);
 		break;
 		case 7:
-			PORTD |= _BV(6);
+			SetPortBit(PORTD, 6);
 		break;
 		case 8:
-			PORTD |= _BV(5);
+			SetPortBit(PORTD, 5);
 		break;
 		case 9:
-			PORTB |= _BV(7);
+			SetPortBit(PORTB, 7);
 		break;
 		case 10:
-			PORTB |= _BV(6);
+			SetPortBit(PORTB, 6);
 		break;
 		
 		//Right side
 		case 11:
-			PORTD |= _BV(4);
+			SetPortBit(PORTD, 4);
 		break;
 		case 12:
-			PORTD |= _BV(3);
+			SetPortBit(PORTD, 3);
 		break;
 		case 13:
-			PORTD |= _BV(2);
+			SetPortBit(PORTD, 2);
 		break;
 		case 14:
-			PORTD |= _BV(1);
+			SetPortBit(PORTD, 1);
 		break;
 		case 15:
-			PORTD |= _BV(0);
+			SetPortBit(PORTD, 0);
 		break;
 		case 16:
-			PORTC |= _BV(5);
+			SetPortBit(PORTC, 5);
 		break;
 		case 17:
-			PORTC |= _BV(4);
+			SetPortBit(PORTC, 4);
 		break;
 		case 18:
-			PORTC |= _BV(3);
+			SetPortBit(PORTC, 3);
 		break;
 		case 19:
-			PORTC |= _BV(2);
+			SetPortBit(PORTC, 2);
 		break;
 		case 20:
-			PORTC |= _BV(1);
+			SetPortBit(PORTC, 1);
 		break;
 		case 21:
-			PORTC |= _BV(0);
+			SetPortBit(PORTC, 0);
 		break;
 	}
   }
@@ -177,73 +184,74 @@
 	{
 		//left side
 		case 0:
-			PORTB &= ~(_BV(5));
+			ClearPortBit(PORTB, 5);
+			//PORTB &= ~(_BV(5));
 		break;
 		case 1:
-			PORTB &= ~(_BV(4));
+			ClearPortBit(PORTB, 4);
 		break;
 		case 2:
-			PORTB &= ~(_BV(3));
+			ClearPortBit(PORTB, 3);
 		break;
 		case 3:
-			PORTB &= ~(_BV(2));
+			ClearPortBit(PORTB, 2);
 		break;
 		case 4:
-			PORTB &= ~(_BV(1));
+			ClearPortBit(PORTB, 1);
 		break;
 		case 5:
-			PORTB &= ~(_BV(0));
+			ClearPortBit(PORTB, 0);
 		break;
 		case 6:
-			PORTD &= ~(_BV(7));
+			ClearPortBit(PORTD, 7);
 		break;
 		case 7:
-			PORTD &= ~(_BV(6));
+			ClearPortBit(PORTD, 6);
 		break;
 		case 8:
-			PORTD &= ~(_BV(5));
+			ClearPortBit(PORTD, 5);
 		break;
 		case 9:
-			PORTB &= ~(_BV(7));
+			ClearPortBit(PORTB, 7);
 		break;
 		case 10:
-			PORTB &= ~(_BV(6));
+			ClearPortBit(PORTB, 6);
 		break;
 		
 		
 		//Right side
 		case 11:
-			PORTD &= ~(_BV(4));
+			ClearPortBit(PORTD, 4);
 		break;
 		case 12:
-			PORTD &= ~(_BV(3));
+			ClearPortBit(PORTD, 3);
 		break;
 		case 13:
-			PORTD &= ~(_BV(2));
+			ClearPortBit(PORTD, 2);
 		break;
 		case 14:
-			PORTD &= ~(_BV(1));
+			ClearPortBit(PORTD, 1);
 		break;
 		case 15:
-			PORTD &= ~(_BV(0));
+			ClearPortBit(PORTD, 0);
 		break;
 		case 16:
-			PORTC &= ~(_BV(5));
+			ClearPortBit(PORTC, 5);
 		break;
 		case 17:
-			PORTC &= ~(_BV(4));
+			ClearPortBit(PORTC, 4);
 		break;
 		case 18:
-			PORTC &= ~(_BV(3));
+			ClearPortBit(PORTC, 3);
 		break;
 		case 19:
-			PORTC &= ~(_BV(2));
+			ClearPortBit(PORTC, 2);
 		break;
 		case 20:
-			PORTC &= ~(_BV(1));
+			ClearPortBit(PORTC, 1);
 		break;
 		case 21:
-			PORTC &= ~(_BV(0));
+			ClearPortBit(PORTC, 0);
 		break;
 		
 	}
@@ -329,41 +337,73 @@
 	//Switch on all odd leds
 	void oddAllOn()
 	{
-		for(int i = 1; i < DIODES_COUNT; i = i + 2)
-		{
-			ledOn(i);
-		}
+		PORTB |= 0b10010101;
+		PORTC |= 0b00010101;
+		PORTD |= 0b01010101;
 	}
 	
 	//Switch off all odd leds
 	void oddAllOff()
 	{
-		for(int i = 1; i < DIODES_COUNT; i = i + 2)
-		{
-			ledOff(i);
-		}
+		PORTB &= 0b01101010;
+		PORTC &= 0b00101010;
+		PORTD &= 0b10101010;
 	}
 	
 	//Switch on all even leds
 	void evenAllOn()
 	{
-		for(int i = 0; i < DIODES_COUNT; i = i + 2)
-		{
-			ledOn(i);
-		}
+		PORTB |= 0b01101010;
+		PORTC |= 0b00101010;
+		PORTD |= 0b10101010;
 	}
 	
 	//Switch off all even leds
 	void evenAllOff()
 	{
-		for(int i = 0; i < DIODES_COUNT; i = i + 2)
+		PORTB &= 0b10010101;
+		PORTC &= 0b00010101;
+		PORTD &= 0b01010101;
+	}
+	
+	
+	
+	//leds Blinking 
+	//delay: delay between led switching.
+	//rotationCount: Count of switching 
+	void ledBlinking(int delay, int rotationCount)
+	{
+		ledAllOn();
+		_delay_ms(delay);
+		for(int i=0;i<rotationCount - 1;i++)
 		{
-			ledOff(i);
+			ledAllOff();
+			_delay_ms(delay);
+			ledAllOn();
+			_delay_ms(delay);
+		}
+		ledAllOff();
+	}
+	
+	//sequential switching odd and even leds
+	//delay: delay between led switching.
+	//rotationCount: Count of switching 
+	void evenOddOnOff(int delay, int rotationCount)
+	{
+		ledAllOff();
+		for(int i=0;i<rotationCount;i++)
+		{	
+			oddAllOn();
+			_delay_ms(delay);
+			ledAllOff();
+			evenAllOn();
+			_delay_ms(delay);
+			ledAllOff();
 		}
 	}
 	
 	//Creating heart by falling leds from top to bottom, like stack.
-	//delay: delay between leg switching.
+	//delay: delay between led switching.
 	void makeHeartByPairFall(int delay)
 	{
 		for(int i = 1; i <= DIODES_PAIR_COUNT; i++)
@@ -381,7 +421,7 @@
 	}
 	
 	//Breaking heart by falling leds from top to bottom.
-	//delay: delay between leg switching.
+	//delay: delay between led switching.
 	void breakHeartByPairFall(int delay)
 	{
 		for(int i = 0; i < DIODES_PAIR_COUNT; i++)
@@ -399,7 +439,7 @@
 	}
 	
 	//ClockWise snake
-	//delay: delay between leg switching. 
+	//delay: delay between led switching. 
 	//length: snake length
 	//rotationCount: Count of snake rotation 
 	void snakeLedClockWise(int delay, int length, int rotationCount)
@@ -428,7 +468,7 @@
 	}
 	
 	//AnticlockWise snake
-	//delay: delay between leg switching. 
+	//delay: delay between led switching. 
 	//length: snake length
 	//rotationCount: Count of snake rotation 
 	void snakeLedAnticlockWise(int delay, int length, int rotationCount)
@@ -457,7 +497,7 @@
 	}
 	
 	//2 snakes moving up
-	//delay: delay between leg switching. 
+	//delay: delay between led switching. 
 	//length: snake length
 	//rotationCount: Count of snake rotation 
 	void snakeTwoUp(int delay, int length, int rotationCount)
@@ -480,7 +520,7 @@
 	}
 	
 	//2 snakes moving down
-	//delay: delay between leg switching. 
+	//delay: delay between led switching. 
 	//length: snake length
 	//rotationCount: Count of snake rotation 
 	void snakeTwoDown(int delay, int length, int rotationCount)
