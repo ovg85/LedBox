@@ -2,6 +2,7 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
+#include <avr/stdlib.h>
 
 #define SetPortBit(port, bit) port |= (1<<bit)
 //PORTB |= _BV(5);
@@ -42,11 +43,13 @@
 	PORTC = 0x00;
 	PORTD = 0x00;
  
-	int ledRandNum[DIODES_COUNT]=
+	/*int ledRandNum[DIODES_COUNT]=
 	{16,1,13,8,4,5,18,7,3,14,10,17,
-	21,2,9,15,0,19,6,11,20,12};
+	21,2,9,15,0,19,6,11,20,12};*/
 	
- 
+	int ledRandNum[DIODES_COUNT]=
+	{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
+	
 	_delay_ms(START_DELAY);
 	 
 	SequencePairOn(INIT_DELAY);
@@ -55,12 +58,7 @@
 	 
 	while (1) {
 	
-		ledAllOff();
-		for(int i=0;i<DIODES_COUNT;i++)
-		{
-			ledOn(ledRandNum[i]);
-			_delay_ms(EFFECT_DELAY);
-		}
+		randomLedOn(EFFECT_DELAY, ledRandNum, DIODES_COUNT);
 	
 		ledBlinking(EFFECT_DELAY, 5);
 		_delay_ms(EFFECT_DELAY);
@@ -539,5 +537,29 @@
 				}
 				_delay_ms(delay);
 			}
+		}
+	}
+	
+	//Switching leds On at random sequence
+	//delay: delay between led switching. 
+	//ledRandNum: array of previuously showed sequence
+	//count: diodes count
+	void randomLedOn(int delay, int ledRandNum[], int count)
+	{
+		for(int i=0;i<count;i++)
+		{
+			int firstIndex=rand()%count;
+			int secondIndex=rand()%count;
+		
+			int third=ledRandNum[firstIndex];
+			ledRandNum[firstIndex]=ledRandNum[secondIndex];
+			ledRandNum[secondIndex]=third;
+		}
+	
+		ledAllOff();
+		for(int i=0;i<count;i++)
+		{
+			ledOn(ledRandNum[i]);
+			_delay_ms(delay);
 		}
 	}
