@@ -4,6 +4,7 @@
 #include <avr/pgmspace.h>
 #include <avr/stdlib.h>
 
+
 #define SetPortBit(port, bit) port |= (1<<bit)
 //PORTB |= _BV(5);
 #define ClearPortBit(port, bit) port &= ~(1<<bit)
@@ -34,6 +35,9 @@
 
 #define SNAKE_DELAY 10
 
+int ledRandNum[DIODES_COUNT]=
+	{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
+
   int main(void)
   {
     DDRB = 0xFF;
@@ -42,13 +46,6 @@
 	PORTB = 0x00;
 	PORTC = 0x00;
 	PORTD = 0x00;
- 
-	/*int ledRandNum[DIODES_COUNT]=
-	{16,1,13,8,4,5,18,7,3,14,10,17,
-	21,2,9,15,0,19,6,11,20,12};*/
-	
-	int ledRandNum[DIODES_COUNT]=
-	{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
 	
 	_delay_ms(START_DELAY);
 	 
@@ -57,7 +54,13 @@
 	_delay_ms(EFFECT_DELAY);
 	 
 	while (1) {
-	
+		performEffects();
+	}
+	return 0;
+  }
+  
+  void performEffects()
+  {
 		randomLedOn(EFFECT_DELAY, ledRandNum, DIODES_COUNT);
 	
 		ledBlinking(EFFECT_DELAY, 5);
@@ -93,8 +96,6 @@
 			snakeTwoDown(SNAKE_DELAY, 3, 1);
 		}
 		_delay_ms(EFFECT_DELAY);
-	}
-	return 0;
   }
   
   //Switch on led
