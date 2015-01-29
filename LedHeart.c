@@ -3,40 +3,8 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <avr/stdlib.h>
+#include <LedHeart.h>
 
-
-#define SetPortBit(port, bit) port |= (1<<bit)
-//PORTB |= _BV(5);
-#define ClearPortBit(port, bit) port &= ~(1<<bit)
-//PORTB &= ~(_BV(5));
-
-//Delay at start
-#define START_DELAY 250
-
-//Delay at initial switching leds on 
-#define INIT_DELAY 10
-
-//Delay between effects
-#define EFFECT_DELAY 30
-
-//Delay for falling leds
-#define FALL_DELAY 15
-
-#define EVEN_ODD_DELAY 30
-
-//Total diodes count
-#define DIODES_COUNT 22
-
-//Diodes count at one sile (left or right)
-#define DIODES_SIDE_COUNT 11
-
-//Count of diodes pair
-#define DIODES_PAIR_COUNT 12
-
-#define SNAKE_DELAY 10
-
-int ledRandNum[DIODES_COUNT]=
-	{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
 
   int main(void)
   {
@@ -59,7 +27,7 @@ int ledRandNum[DIODES_COUNT]=
 	return 0;
   }
   
-  void performEffects()
+  void performEffects(void)
   {
 		randomLedOn(EFFECT_DELAY, ledRandNum, DIODES_COUNT);
 	
@@ -318,7 +286,7 @@ int ledRandNum[DIODES_COUNT]=
 	}
 	
 	//Switch on all leds
-	void ledAllOn()
+	void ledAllOn(void)
 	{
 		PORTB = 0xFF;
 		PORTC = 0xFF;
@@ -326,7 +294,7 @@ int ledRandNum[DIODES_COUNT]=
 	}
 	
 	//Switch off all leds
-	void ledAllOff()
+	void ledAllOff(void)
 	{
 		PORTB = 0x00;
 		PORTC = 0x00;
@@ -334,7 +302,7 @@ int ledRandNum[DIODES_COUNT]=
 	}
 	
 	//Switch on all odd leds
-	void oddAllOn()
+	void oddAllOn(void)
 	{
 		PORTB |= 0b10010101;
 		PORTC |= 0b00010101;
@@ -342,7 +310,7 @@ int ledRandNum[DIODES_COUNT]=
 	}
 	
 	//Switch off all odd leds
-	void oddAllOff()
+	void oddAllOff(void)
 	{
 		PORTB &= 0b01101010;
 		PORTC &= 0b00101010;
@@ -350,7 +318,7 @@ int ledRandNum[DIODES_COUNT]=
 	}
 	
 	//Switch on all even leds
-	void evenAllOn()
+	void evenAllOn(void)
 	{
 		PORTB |= 0b01101010;
 		PORTC |= 0b00101010;
@@ -358,7 +326,7 @@ int ledRandNum[DIODES_COUNT]=
 	}
 	
 	//Switch off all even leds
-	void evenAllOff()
+	void evenAllOff(void)
 	{
 		PORTB &= 0b10010101;
 		PORTC &= 0b00010101;
