@@ -1,1 +1,1 @@
-<Project name="LedHeart"><File path="LedHeart.c"></File></Project>
+<Project name="LedHeart"><File path="LedHeart.c"></File><File path="LedHeart.h"></File></Project>
