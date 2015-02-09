@@ -8,13 +8,13 @@
 #define START_DELAY 250
 
 //Delay at initial switching leds on 
-#define INIT_DELAY 10
+#define INIT_DELAY 5
 
 //Delay between effects
 #define EFFECT_DELAY 30
 
 //Delay for falling leds
-#define FALL_DELAY 15
+#define FALL_DELAY 3
 
 #define EVEN_ODD_DELAY 30
 
@@ -27,7 +27,9 @@
 //Count of diodes pair
 #define DIODES_PAIR_COUNT 12
 
-#define SNAKE_DELAY 10
+#define SEQUENCE_PAIR_ON_DELAY 5
+
+#define SNAKE_DELAY 5
 
 int ledRandNum[DIODES_COUNT]=
 	{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};

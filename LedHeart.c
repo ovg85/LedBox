@@ -40,7 +40,7 @@
 		for(int i=0;i<3;i++)
 		{
 			makeHeartByPairFall(FALL_DELAY);
-			_delay_ms(FALL_DELAY);
+			_delay_ms(EFFECT_DELAY);
 			breakHeartByPairFall(FALL_DELAY);
 		}
 		_delay_ms(EFFECT_DELAY);
