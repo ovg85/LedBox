@@ -3,36 +3,8 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <avr/stdlib.h>
+#include <LedHeart.h>
 
-#define SetPortBit(port, bit) port |= (1<<bit)
-//PORTB |= _BV(5);
-#define ClearPortBit(port, bit) port &= ~(1<<bit)
-//PORTB &= ~(_BV(5));
-
-//Delay at start
-#define START_DELAY 250
-
-//Delay at initial switching leds on 
-#define INIT_DELAY 10
-
-//Delay between effects
-#define EFFECT_DELAY 30
-
-//Delay for falling leds
-#define FALL_DELAY 15
-
-#define EVEN_ODD_DELAY 30
-
-//Total diodes count
-#define DIODES_COUNT 22
-
-//Diodes count at one sile (left or right)
-#define DIODES_SIDE_COUNT 11
-
-//Count of diodes pair
-#define DIODES_PAIR_COUNT 12
-
-#define SNAKE_DELAY 10
 
   int main(void)
   {
@@ -42,13 +14,6 @@
 	PORTB = 0x00;
 	PORTC = 0x00;
 	PORTD = 0x00;
- 
-	/*int ledRandNum[DIODES_COUNT]=
-	{16,1,13,8,4,5,18,7,3,14,10,17,
-	21,2,9,15,0,19,6,11,20,12};*/
-	
-	int ledRandNum[DIODES_COUNT]=
-	{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
 	
 	_delay_ms(START_DELAY);
 	 
@@ -57,7 +22,13 @@
 	_delay_ms(EFFECT_DELAY);
 	 
 	while (1) {
-	
+		performEffects();
+	}
+	return 0;
+  }
+  
+  void performEffects(void)
+  {
 		randomLedOn(EFFECT_DELAY, ledRandNum, DIODES_COUNT);
 	
 		ledBlinking(EFFECT_DELAY, 5);
@@ -69,7 +40,7 @@
 		for(int i=0;i<3;i++)
 		{
 			makeHeartByPairFall(FALL_DELAY);
-			_delay_ms(FALL_DELAY);
+			_delay_ms(EFFECT_DELAY);
 			breakHeartByPairFall(FALL_DELAY);
 		}
 		_delay_ms(EFFECT_DELAY);
@@ -93,8 +64,6 @@
 			snakeTwoDown(SNAKE_DELAY, 3, 1);
 		}
 		_delay_ms(EFFECT_DELAY);
-	}
-	return 0;
   }
   
   //Switch on led
@@ -317,7 +286,7 @@
 	}
 	
 	//Switch on all leds
-	void ledAllOn()
+	void ledAllOn(void)
 	{
 		PORTB = 0xFF;
 		PORTC = 0xFF;
@@ -325,7 +294,7 @@
 	}
 	
 	//Switch off all leds
-	void ledAllOff()
+	void ledAllOff(void)
 	{
 		PORTB = 0x00;
 		PORTC = 0x00;
@@ -333,7 +302,7 @@
 	}
 	
 	//Switch on all odd leds
-	void oddAllOn()
+	void oddAllOn(void)
 	{
 		PORTB |= 0b10010101;
 		PORTC |= 0b00010101;
@@ -341,7 +310,7 @@
 	}
 	
 	//Switch off all odd leds
-	void oddAllOff()
+	void oddAllOff(void)
 	{
 		PORTB &= 0b01101010;
 		PORTC &= 0b00101010;
@@ -349,7 +318,7 @@
 	}
 	
 	//Switch on all even leds
-	void evenAllOn()
+	void evenAllOn(void)
 	{
 		PORTB |= 0b01101010;
 		PORTC |= 0b00101010;
@@ -357,7 +326,7 @@
 	}
 	
 	//Switch off all even leds
-	void evenAllOff()
+	void evenAllOff(void)
 	{
 		PORTB &= 0b10010101;
 		PORTC &= 0b00010101;
